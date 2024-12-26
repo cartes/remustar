@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+</head>
+
+<body class="bg-base-100 text-neutral-content">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-neutral text-neutral-content hidden md:flex flex-col p-4">
+            <div class="text-2xl font-bold mb-8">Remustar {% if not have_businesses %} shit {% endif %}</div>
+            <nav class="flex-1 space-y-2">
+                <a href="#" class="flex items-center p-2 rounded hover:bg-neutral-focus">
+                    <span class="ml-2">Inicio</span>
+                </a>
+                {% if user.is_superuser %}
+                <a href="{% url 'business_list' %}" class="flex items-center p-2 rounded hover:bg-neutral-focus {% if request.path == '/business/' %}bg-neutral-focus font-extrabold text-white{% endif %}">
+                    <span class="ml-2">Negocios</span>
+                </a>
+                {% endif %}
+                {% if user.is_superuser and have_businesses %}
+                <a href="{% url 'admin_list' %}" class="flex items-center p-2 rounded hover:bg-neutral-focus {% if request.path == '/admin/' %}bg-neutral-focus font-extrabold text-white{% endif %}">
+                    <span class="ml-2">Administradores</span>
+                </a>
+                {% endif %}
+                {% if is_admin_or_superadmin and have_businesses %}
+                <a href="{% url 'users_list' %}" class="flex items-center p-2 rounded hover:bg-neutral-focus {% if request.path == '/users/' %}bg-neutral-focus font-extrabold text-white{% endif %}">
+                    <span class="ml-2">Empleados</span>
+                </a>
+                {% endif %}
+                <a href="#" class="flex items-center p-2 rounded hover:bg-neutral-focus">
+                    <span class="ml-2">Otra Sección</span>
+                </a>
+            </nav>
+        </aside>
+    
+        <!-- Main content area -->
+        <div class="flex-1 flex flex-col">
+            <!-- Header -->
+            <header class="flex justify-between items-center bg-base-200 p-4 shadow-md">
+                <div class="text-xl font-semibold">{{ title }}</div>
+                
+                <!-- User info with dropdown -->
+                <div class="relative">
+
+                    <!-- Dropdown menu -->
+                    <div class="dropdown dropdown-end">
+                        <label tabindex="0" class="btn btn-ghost normal-case">
+                            <span class="mr-2">{{ request.user.username }}</span>
+                            <div class="avatar">
+                                <div class="w-8 rounded-full">
+                                    <img src="{% static 'images/avatar_placeholder.png' %}" alt="User Avatar">
+                                </div>
+                            </div>
+                        </label>
+                        <!-- Dropdown menu -->
+                        <ul tabindex="0" class="menu dropdown-content mt-2 p-2 shadow bg-base-200 rounded-box w-52">
+                            <li><a href="#">Mi Perfil</a></li>
+                            <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </header>
+    
+            <!-- Main content -->
+            <main class="flex-1 p-6">
+                {% block main_content %}
+                <!-- Aquí va el contenido de cada página específica -->
+                {% endblock %}
+            </main>
+        </div>
+    </div>
+    
+</body>

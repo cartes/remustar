@@ -1,0 +1,48 @@
+{% extends 'admin.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-4">Editar Usuario {{ user.username }}</h1>
+
+    <form method="POST" class="space-y-4 w-1/2 bg-base-200 p-4 rounded shadow">
+        {% csrf_token %}
+        
+        <!-- Renderiza cada campo con su etiqueta personalizada -->
+        <div class="form-control">
+            <label class="label">{{ form.username.label }}</label>
+            {{ form.username }}
+        </div>
+        
+        <div class="form-control">
+            <label class="label">{{ form.email.label }}</label>
+            {{ form.email }}
+        </div>
+        
+        <div class="form-control">
+            <label class="label">{{ form.first_name.label }}</label>
+            {{ form.first_name }}
+        </div>
+        
+        <div class="form-control">
+            <label class="label">{{ form.last_name.label }}</label>
+            {{ form.last_name }}
+        </div>
+
+        <div class="form-control">
+            <label class="label">{{ form.phone_number.label }}</label>
+            {{ form.phone_number }}
+        </div>
+
+        <div class="form-control">
+            <label class="label">{{ form.address.label }}</label>
+            {{ form.address }}
+        </div>
+
+        <div class="flex space-x-4 mt-4">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <a href="{% url 'user_detail' user.id %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

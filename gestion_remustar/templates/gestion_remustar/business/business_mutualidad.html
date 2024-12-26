@@ -1,0 +1,48 @@
+{% extends 'admin.html' %}
+{% load custom_filters %}
+
+{% block main_content %}
+<div class="container mx-auto p-6">
+  <h2 class="text-2xl font-semibold text-gray-700">Mutualidad</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+    
+
+    <label class="label">Caja de Compensación</label>
+    <select name="ccaf" class="select select-bordered w-1/2">
+      <option>Seleccione una Caja de Compensación</option>
+      <option value="sin mutualidad" {% if ccaf == "sin mutualidad" %}selected{% endif %}>Sin mutualidad</option>
+      {% for item in list_ccaf %}
+        <option value="{{ item.code }}" {% if ccaf == item.code %}selected{% endif %}>{{ item.name }}</option>
+      {% endfor %}
+      <option value="otro">Otro</option>
+    </select>
+    <input class="input input-bordered mt-4 w-1/2 hidden" name="ccaf_otro" type="text" placeholder="Ingrese el nombre de la mutualidad" />
+    <label class="label mt-6">Mutual</label>
+    <select name="mutual" class="select select-bordered w-1/2">
+      <option>Seleccione una Mutual</option>
+      {% for item_mutual in list_mutual %}
+        <option value="{{ item_mutual.code }}" {% if mutual == item_mutual.code %}selected{% endif %}>{{ item_mutual.name }}</option>
+      {% endfor %}
+    </select>
+    <div class="mt-6">
+      <a href="{% url 'business_list' %}" class="btn btn-secondary">Cancelar</a>
+      <button class="btn btn-primary">Guardar</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const select = document.querySelector('select[name="ccaf"]');
+  const input = document.querySelector('input[name="ccaf_otro"]');
+
+  select.addEventListener('change', (e) => {
+    if (e.target.value === 'otro') {
+      input.classList.remove('hidden');
+    } else {
+      input.classList.add('hidden');
+    }
+  });
+</script>
+{% endblock %}

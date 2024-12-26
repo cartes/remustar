@@ -1,0 +1,32 @@
+{% extends "admin.html" %} 
+{% block main_content %}
+    <div class="container mx-auto p-6">
+        <form method="POST" class="space-y-4 w-1/2 bg-base-200 p-4 rounded shadow">
+            {% csrf_token %}
+            <div class="form-control">
+                <label class="label">{{ businessForm.name.label }}</label>
+                {{ businessForm.name }}
+            </div>
+            <div class="form-control">
+                <label class="label">{{ businessForm.rut.label }}</label>
+                {{ businessForm.rut }}
+            </div>
+            <div class="form-control">
+                <label class="label">{{ businessForm.address.label }}</label>
+                {{ businessForm.address }}
+            </div>
+            <div class="form-control">
+                <label class="label">{{ businessForm.phone_number.label }}</label>
+                {{ businessForm.phone_number }}
+            </div>
+            <div class="form-control">
+                <label class="label">{{ businessForm.email.label }}</label>
+                {{ businessForm.email }}
+            </div>
+            <div class="flex space-x-4 mt-4">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a href="{% url 'business_list' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

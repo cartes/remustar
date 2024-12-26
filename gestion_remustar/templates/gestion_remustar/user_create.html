@@ -1,0 +1,51 @@
+{% extends 'admin.html' %}
+
+{% block main_content %}
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-4">Agregar Usuario</h1>
+
+    <form method="POST" class="space-y-4 w-1/2 bg-base-200 p-4 rounded shadow">
+        {% csrf_token %}
+
+        <div class="form-control">
+            <label class="label">{{ form.email.label }}</label>
+            {{ form.email }}
+        </div>
+
+        <div class="form-control">
+            <label class="label">{{ form.first_name.label }}</label>
+            {{ form.first_name }}
+        </div>
+
+        <div class="form-control">
+            <label class="label">{{ form.last_name.label }}</label>
+            {{ form.last_name }}
+        </div>
+
+        <div class="form-control">
+            <label class="label">{{ form.phone_number.label }}</label>
+            {{ form.phone_number }}
+        </div>
+
+        <div class="form-control">
+            <label class="label">{{ form.address.label }}</label>
+            {{ form.address }}
+        </div>
+
+        <div class="form-control">
+            <label class="label">{{ form.password1.label }}</label>
+            {{ form.password1 }}
+        </div>
+
+        <div class="form-control">
+            <label class="label">{{ form.password2.label }}</label>
+            {{ form.password2 }}
+        </div>
+
+        <div class="flex space-x-4 mt-4">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a href="{% url 'users_list' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

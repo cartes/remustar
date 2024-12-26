@@ -1,0 +1,44 @@
+{% extends 'admin.html' %}
+
+{% block main_content %}
+  <div class="container mx-auto p-6">
+    {% if not have_businesses %}
+      <div class="flex w-11/12 justify-between items-center mb-4">
+        <h1 class="text-2xl">No hay negocios registrados</h1>
+        <a href="{% url 'business_create' %}" class="btn btn-sm btn-primary">Agregar Empresa</a>
+      </div>
+    {% else %}
+      <div class="flex w-full justify-between items-center mb-4">
+        <h1 class="text-2xl">Listado de negocios</h1>
+        <a href="{% url 'business_create' %}" class="btn btn-sm btn-primary">Agregar Empresa</a>
+      </div>
+      <table class="table table-zebra border table-pin-rows rounded-none border-separate w-full border-slate-500 table-xs">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>RUT</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Email de Contacto</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for business in businesses %}
+            <tr>
+              <td>{{ business.name }}</td>
+              <td>{{ business.rut }}</td>
+              <td>{{ business.address }}</td>
+              <td>{{ business.phone }}</td>
+              <td>{{ business.email }}</td>
+              <td class="text-center">
+                <a href="{% url 'business_card' business.id %}" class="btn btn-primary btn-sm">Ver ficha</a>
+                <a href="{% url 'business_mutualidad' business.id %}" class="btn btn-secondary btn-sm">Mutualidad</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+{% endblock %}

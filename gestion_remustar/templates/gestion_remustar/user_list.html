@@ -1,0 +1,79 @@
+{% extends "admin.html" %}
+
+{% block main_content %}
+<div class="container mx-auto p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-3xl font-bold">{{ title }}</h1>
+        {% if request.path == '/admin/' %}
+        <a href="{% url 'admin_create' %}" class="btn btn-sm btn-primary">Agregar Administrador</a>
+        {% else %}
+        <a href="{% url 'user_create' %}" class="btn btn-sm btn-primary">Agregar Usuario</a>
+        {% endif %}
+    </div>
+
+    <div class="overflow-x-auto py-4 min-h-full flex">
+        <table class="table table-zebra border table-pin-rows rounded-none border-separate w-full border-slate-500 table-xs">
+            <thead>
+                <tr>
+                    <th class="text-center">Nombre</th>
+                    <th class="text-center">Correo Electrónico</th>
+                    <th class="text-center">Fecha de Creación</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td class="text-center">{{ user.first_name }} {{ user.last_name }}</td>
+                        <td class="text-center">{{ user.email }}</td>
+                        <td class="text-center">{{ user.date_joined }}</td>
+                        <td class="text-left">
+                            <a href="{% url 'user_detail' user.id %}" class="btn btn-sm btn-primary">Ver</a>
+                            <a href="{% url 'user_edit' user.id %}" class="btn btn-sm btn-warning">Editar</a>
+                            {% if not user.is_superuser %}
+                            <a href="#" onclick="openDeleteModal({{ user.id }}, '{{ user.username }}')" class="btn btn-sm btn-danger">Eliminar</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal de Confirmación -->
+<div id="deleteModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg w-1/3">
+        <h2 class="text-2xl font-bold mb-4">Confirmar Eliminación</h2>
+        <p>¿Estás seguro de que deseas eliminar al usuario <span id="usernameToDelete"></span>?</p>
+        <div class="mt-6 flex justify-end space-x-4">
+            <button onclick="closeDeleteModal()" class="btn btn-secondary">Cancelar</button>
+            <form id="deleteForm" method="POST" action="{% url 'user_delete' 0 %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Confirmar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openDeleteModal(userId, username) {
+        console.log(userId, username);
+        // Configurar nombre de usuario en el modal
+        document.getElementById('usernameToDelete').textContent = username;
+
+        // Restablecer la acción del formulario a su estado original
+        const deleteForm = document.getElementById('deleteForm');
+        deleteForm.action = "{% url 'user_delete' 0 %}".replace('/0/', '/' + userId + '/');
+
+        // Mostrar el modal
+        document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+        // Ocultar el modal
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+</script>
+
+{% endblock %}
